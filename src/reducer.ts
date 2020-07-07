@@ -1,5 +1,6 @@
 import { Reducer } from 'redux';
 import { PlayerAction, PlayerActionType } from './actions/player';
+import { FFT_SIZE } from './const';
 
 export interface PlayerState {
   audioCtx: AudioContext | undefined;
@@ -42,7 +43,7 @@ const PlayerReducer: Reducer<PlayerState, PlayerAction> = (
 
       // analyser
       const analyser = action.audioCtx.createAnalyser();
-      analyser.fftSize = 256;
+      analyser.fftSize = FFT_SIZE;
       source.connect(analyser);
       // analyser.connect(action.audioCtx.destination);
 
