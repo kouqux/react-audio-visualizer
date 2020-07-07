@@ -26,4 +26,33 @@ export class CanvasUtil {
     }
     this.ctx.save();
   }
+
+  /**
+   * 円状のビジュアライザを描画
+   * @param bufferLength
+   */
+  drawCircleVisualizer(bufferLength: Uint8Array) {
+    const angleStep = (Math.PI * 2) / bufferLength.length;
+
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.beginPath();
+
+    // 円の半径
+    const radius = 200;
+
+    for (let index = 0; index < bufferLength.length; index += 1) {
+      const dist = bufferLength[index] + radius;
+      const angle = angleStep * index + 0.01;
+      const x1 = this.canvas.width / 2 + radius * Math.cos(angle);
+      const y1 = this.canvas.height / 2 + radius * Math.sin(angle);
+      const x = this.canvas.width / 2 + dist * Math.cos(angle);
+      const y = this.canvas.height / 2 + dist * Math.sin(angle);
+      this.ctx.moveTo(x1, y1);
+      this.ctx.lineTo(x, y);
+      this.ctx.lineWidth = 5;
+      this.ctx.closePath();
+    }
+    // 現在のパスを輪郭表示する
+    this.ctx.stroke();
+  }
 }
