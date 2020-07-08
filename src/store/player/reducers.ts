@@ -1,17 +1,6 @@
 import { Reducer } from 'redux';
-import { PlayerAction, PlayerActionType } from './actions/player';
-import { FFT_SIZE } from './const';
-
-export interface PlayerState {
-  audioCtx: AudioContext | undefined;
-  music: AudioBufferSourceNode | undefined;
-  analyser: AnalyserNode | undefined;
-  gainNode: GainNode | undefined;
-  isFinishLoading: boolean;
-  isInitiallPaly: boolean; // 初回再生
-  isPlay: boolean;
-  volume: number;
-}
+import { PlayerAction, PlayerActionType, PlayerState } from './types';
+import { FFT_SIZE } from '../../const';
 
 export const initialState: PlayerState = {
   audioCtx: undefined,
@@ -24,7 +13,7 @@ export const initialState: PlayerState = {
   volume: 1
 };
 
-const PlayerReducer: Reducer<PlayerState, PlayerAction> = (
+const playerReducer: Reducer<PlayerState, PlayerAction> = (
   state: PlayerState = initialState,
   action: PlayerAction
 ): PlayerState => {
@@ -118,6 +107,7 @@ const PlayerReducer: Reducer<PlayerState, PlayerAction> = (
         ...state,
         isPlay: false
       };
+
     default: {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const _: never = action.type;
@@ -127,4 +117,4 @@ const PlayerReducer: Reducer<PlayerState, PlayerAction> = (
   }
 };
 
-export default PlayerReducer;
+export default playerReducer;

@@ -1,24 +1,14 @@
 import React, { FC, useEffect, useCallback, useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-
+import Button from '@material-ui/core/Button';
+import Fade from '@material-ui/core/Fade';
 import { CanvasUtil } from '../../utils/CanvasUtil';
-
-import PowerIcon from '../atoms/PowerIcon';
-import FileButton from '../atoms/FileButton';
-import PlayButton from '../atoms/PlayButton';
-import PauseButton from '../atoms/PauseButton';
-import VolumeSlider from '../atoms/VolumeSlider';
 
 export interface VisualizerProps {
   analyser?: AnalyserNode | undefined;
   isPlay?: boolean;
+  mode?: string;
   loadFile?: (file: File | null) => void;
   setMusic?: (buffer: AudioBuffer, audioCtx: AudioContext) => void;
   changeVolume: (volume: number) => void;
@@ -28,50 +18,61 @@ export interface VisualizerProps {
 
 const useStyles = makeStyles(() => ({
   container: {
-    paddingTop: '200px',
-    maxWidth: 1024,
-    minWidth: 720
-  },
-  root: {
-    backgroundColor: '#23292D'
-  },
-  top: {
-    backgroundColor: '#0D0D0D'
-  },
-  content: {
-    backgroundColor: '#15191C'
-  },
-  footer: {
-    backgroundColor: '#DEDEDE'
+    width: '100%',
+    height: '100vh'
   },
   canvasContainer: {
     position: 'relative',
     width: '100%',
-    paddingTop: '40%'
+    height: '100%'
   },
   canvas: {
-    backgroundColor: '#252A2E',
     position: 'absolute',
     width: '100%',
     height: '100%',
     top: 0,
     left: 0
+  },
+  playButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    margin: 'auto',
+    width: '200px',
+    height: '200px',
+    borderRadius: '100%',
+    fontSize: '2em'
+  },
+  file: {
+    display: 'none'
   }
 }));
 
 const Visualizer: FC<VisualizerProps> = ({
   analyser,
   isPlay,
+  mode,
   setMusic = () => undefined,
-  changeVolume = () => undefined,
-  play = () => undefined,
-  pause = () => undefined
+  play = () => undefined
 }) => {
   const classes = useStyles();
 
   const inputRef = useRef();
 
   const [canvasUtil, setCanvasUtil] = useState(Object);
+  const [isViewFileButton, setIsViewFileButton] = useState(() => {
+    const initialState = true;
+
+    return initialState;
+  });
+
+  const [isViewCanvas, setIsViewCanvas] = useState(() => {
+    const initialState = false;
+
+    return initialState;
+  });
 
   /**
    * ファイル読み込み
@@ -80,6 +81,8 @@ const Visualizer: FC<VisualizerProps> = ({
   const loadFile = (file: File | null): void => {
     if (!file) return;
     if (!file.type.match('audio.*')) return;
+    setIsViewFileButton(false);
+    setIsViewCanvas(true);
 
     const audioCtx = new AudioContext();
 
@@ -90,28 +93,37 @@ const Visualizer: FC<VisualizerProps> = ({
       if (fileReader.result instanceof ArrayBuffer) {
         audioCtx.decodeAudioData(fileReader.result, buffer => {
           setMusic(buffer, audioCtx);
+          play();
         });
       }
     };
   };
 
-  const handlePlayButton = (): void => {
-    play();
-  };
-
-  const handlePauseButton = (): void => {
-    pause();
+  /**
+   * input file のクリックイベントを発火させる
+   */
+  const clickFileInput = (): void => {
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput === null) return;
+    fileInput.click();
   };
 
   const render = useCallback((): void => {
     if (!(analyser instanceof AnalyserNode)) return;
     const bufferLength = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(bufferLength);
-
-    canvasUtil.drawVisualize(bufferLength);
+    switch (mode) {
+      case 'bar':
+        canvasUtil.drawCircleVisualizer(bufferLength);
+        break;
+      case 'circle':
+        canvasUtil.drawBarVisualizer(bufferLength);
+        break;
+      default:
+    }
 
     requestAnimationFrame(render);
-  }, [analyser, canvasUtil]);
+  }, [analyser, canvasUtil, mode]);
 
   // 初回マウント時
   useEffect(() => {
@@ -120,7 +132,7 @@ const Visualizer: FC<VisualizerProps> = ({
     canvas.width = container?.clientWidth;
     canvas.height = container?.clientHeight;
     setCanvasUtil(new CanvasUtil(canvas));
-  }, [inputRef]);
+  }, [inputRef, mode]);
 
   useEffect(() => {
     if (isPlay) {
@@ -129,51 +141,32 @@ const Visualizer: FC<VisualizerProps> = ({
   }, [isPlay, render]);
 
   return (
-    <Container id="VisualizerContainer" className={classes.container}>
-      <Card className={classes.root} variant="outlined">
-        {/* Header */}
-        <CardActions className={classes.top}>
-          <PowerIcon />
-          <Typography color="secondary" variant="h5">
-            Visualizer
-          </Typography>
-        </CardActions>
+    <div className={classes.container}>
+      <Fade in={isViewFileButton} timeout={1000}>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={classes.playButton}
+          onClick={clickFileInput}
+        >
+          Drop
+          <input
+            id="fileInput"
+            className={classes.file}
+            type="file"
+            onChange={e =>
+              loadFile(e.target.files !== null ? e.target.files[0] : null)
+            }
+          />
+        </Button>
+      </Fade>
 
-        {/* Content */}
-        <CardContent className={classes.content}>
-          <div id="canvasContainer" className={classes.canvasContainer}>
-            <canvas id="canvas" className={classes.canvas} />
-          </div>
-        </CardContent>
-
-        {/* Footer */}
-        <CardActions className={classes.footer}>
-          <Grid
-            container
-            spacing={1}
-            direction="row"
-            justify="space-between"
-            alignItems="center"
-          >
-            <Grid item xs={1}>
-              <FileButton loadFile={loadFile} />
-            </Grid>
-
-            <Grid item xs={8}>
-              {!isPlay ? (
-                <PlayButton handlePlayButton={handlePlayButton} />
-              ) : (
-                <PauseButton handlePauseButton={handlePauseButton} />
-              )}
-            </Grid>
-
-            <Grid item xs={3}>
-              <VolumeSlider changeVolume={changeVolume} />
-            </Grid>
-          </Grid>
-        </CardActions>
-      </Card>
-    </Container>
+      <Fade in={isViewCanvas} timeout={1000}>
+        <div id="canvasContainer" className={classes.canvasContainer}>
+          <canvas id="canvas" className={classes.canvas} />
+        </div>
+      </Fade>
+    </div>
   );
 };
 

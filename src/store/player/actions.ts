@@ -1,18 +1,4 @@
-export enum PlayerActionType {
-  SET_MUSIC = 'PLAYER/SET_MUSIC',
-  CHANGE_VOLUME = 'PLAYER/CHANGE_VOLUME',
-  PLAY = 'PLAYER/PLAY',
-  STOP = 'PLAYER/STOP',
-  PAUSE = 'PLAYER/PAUSE'
-}
-
-export interface PlayerAction {
-  type: PlayerActionType;
-  buffer?: AudioBuffer;
-  audioCtx?: AudioContext;
-  music?: AudioBufferSourceNode;
-  volume?: number;
-}
+import { PlayerActionType, PlayerAction } from './types';
 
 export const setMusic = (
   buffer: AudioBuffer,

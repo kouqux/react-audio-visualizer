@@ -1,15 +1,26 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import { play, pause, setMusic, changeVolume } from '../actions/player';
-import { PlayerState } from '../reducer';
+import { play, pause, setMusic, changeVolume } from '../store/player/actions';
 
 import Visualizer from '../components/molecules/Visualizer';
+
+interface RootState {
+  player: {
+    music: AudioBufferSourceNode | undefined;
+    analyser: AnalyserNode | undefined;
+    isPlay: boolean;
+  };
+  visualizer: {
+    mode: string;
+  };
+}
 
 interface StateProps {
   music: AudioBufferSourceNode | undefined;
   analyser: AnalyserNode | undefined;
   isPlay: boolean;
+  mode: string;
 }
 
 interface DispatchProps {
@@ -19,10 +30,11 @@ interface DispatchProps {
   pause: () => void;
 }
 
-const mapStateToProps = (state: PlayerState): StateProps => ({
-  music: state.music,
-  analyser: state.analyser,
-  isPlay: state.isPlay
+const mapStateToProps = (state: RootState): StateProps => ({
+  music: state.player.music,
+  analyser: state.player.analyser,
+  isPlay: state.player.isPlay,
+  mode: state.visualizer.mode
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
