@@ -6,12 +6,14 @@ import { createStore } from 'redux';
 import './index.css';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import App from './App';
-import PlayerReducer, { initialState } from './reducer';
+
+import rootReducer from './store/index';
+
 import * as serviceWorker from './serviceWorker';
 
 import { theme } from './materialui/theme';
 
-const store = createStore(PlayerReducer, initialState);
+const store = createStore(rootReducer);
 
 ReactDOM.render(
   <Provider store={store}>

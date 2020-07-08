@@ -28,7 +28,26 @@ export class CanvasUtil {
   }
 
   /**
-   * 円状のビジュアライザを描画
+   * 棒状のビジュアライザーを描画
+   * @param bufferLength
+   */
+  drawBarVisualizer(bufferLength: Uint8Array) {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.beginPath();
+    this.ctx.fillStyle = '#ff5722';
+    for (let index = 0; index < bufferLength.length; index += 1) {
+      this.ctx.fillRect(
+        index * (this.canvas.width / bufferLength.length),
+        this.canvas.height - bufferLength[index],
+        this.canvas.width / bufferLength.length - 1,
+        bufferLength[index]
+      );
+    }
+    this.ctx.save();
+  }
+
+  /**
+   * 円状のビジュアライザーを描画
    * @param bufferLength
    */
   drawCircleVisualizer(bufferLength: Uint8Array) {

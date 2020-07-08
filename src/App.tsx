@@ -1,8 +1,8 @@
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-// import Visualizer from './containers/Visualizer';
-import CircleVisualizer from './containers/CircleVisualizer';
+import Visualizer from './containers/Visualizer';
+import LongMenu from './containers/LongMenu';
 
 const themeDark = createMuiTheme({
   palette: {
@@ -19,7 +19,8 @@ const App = () => {
   return (
     <MuiThemeProvider theme={themeDark}>
       <CssBaseline />
-      <CircleVisualizer />
+      <LongMenu />
+      <Visualizer />
     </MuiThemeProvider>
   );
 };
