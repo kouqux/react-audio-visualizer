@@ -7,8 +7,12 @@ const App = () => {
   return (
     <div>
       <CssBaseline />
-      <Header />
-      <Visualizer />
+      <header>
+        <Header />
+      </header>
+      <main>
+        <Visualizer />
+      </main>
     </div>
   );
 };
