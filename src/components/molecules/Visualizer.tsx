@@ -149,7 +149,7 @@ const Visualizer: FC<VisualizerProps> = ({
           className={classes.playButton}
           onClick={clickFileInput}
         >
-          Drop
+          MUSIC
           <input
             id="fileInput"
             className={classes.file}
