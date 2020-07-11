@@ -2,15 +2,13 @@ import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Visualizer from './containers/Visualizer';
-import LongMenu from './containers/LongMenu';
+import Header from './containers/Header';
 
 const themeDark = createMuiTheme({
   palette: {
+    type: 'dark',
     background: {
       default: '#222222'
-    },
-    text: {
-      primary: '#ffffff'
     }
   }
 });
@@ -19,7 +17,7 @@ const App = () => {
   return (
     <MuiThemeProvider theme={themeDark}>
       <CssBaseline />
-      <LongMenu />
+      <Header />
       <Visualizer />
     </MuiThemeProvider>
   );

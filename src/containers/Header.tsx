@@ -2,8 +2,9 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { changeMode } from '../store/visualizer/actions';
+import { changeVolume } from '../store/player/actions';
 
-import LongMenu from '../components/molecules/LongMenu';
+import Header from '../components/molecules/Header';
 
 interface RootState {
   visualizer: {
@@ -19,6 +20,7 @@ interface StateProps {
 
 interface DispatchProps {
   changeMode: (mode: string) => void;
+  changeVolume: (volume: number) => void;
 }
 
 const mapStateToProps = (state: RootState): StateProps => ({
@@ -27,7 +29,8 @@ const mapStateToProps = (state: RootState): StateProps => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-  changeMode: mode => dispatch(changeMode(mode))
+  changeMode: mode => dispatch(changeMode(mode)),
+  changeVolume: volume => dispatch(changeVolume(volume))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LongMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
