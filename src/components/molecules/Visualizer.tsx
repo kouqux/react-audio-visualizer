@@ -19,7 +19,7 @@ export interface VisualizerProps {
 const useStyles = makeStyles(() => ({
   container: {
     width: '100%',
-    height: '100vh',
+    height: '100vh'
   },
   canvasContainer: {
     position: 'relative',
