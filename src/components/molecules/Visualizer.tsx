@@ -19,7 +19,7 @@ export interface VisualizerProps {
 const useStyles = makeStyles(() => ({
   container: {
     width: '100%',
-    height: '100vh'
+    height: '100vh',
   },
   canvasContainer: {
     position: 'relative',
@@ -114,10 +114,10 @@ const Visualizer: FC<VisualizerProps> = ({
     analyser.getByteFrequencyData(bufferLength);
     switch (mode) {
       case 'bar':
-        canvasUtil.drawCircleVisualizer(bufferLength);
+        canvasUtil.drawBarVisualizer(bufferLength);
         break;
       case 'circle':
-        canvasUtil.drawBarVisualizer(bufferLength);
+        canvasUtil.drawCircleVisualizer(bufferLength);
         break;
       default:
     }
