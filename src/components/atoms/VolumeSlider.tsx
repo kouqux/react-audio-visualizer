@@ -10,7 +10,7 @@ import { isNumber } from 'util';
 const useStyles = makeStyles(() => ({
   root: {
     width: 200,
-    margin: '0 0 0 auto'
+    paddingTop: 7
   }
 }));
 

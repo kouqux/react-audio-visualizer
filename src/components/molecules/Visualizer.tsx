@@ -13,7 +13,6 @@ export interface VisualizerProps {
   setMusic?: (buffer: AudioBuffer, audioCtx: AudioContext) => void;
   changeVolume: (volume: number) => void;
   play?: () => void;
-  pause?: () => void;
 }
 
 const useStyles = makeStyles(() => ({

@@ -7,6 +7,8 @@ import Button from '@material-ui/core/Button';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 
 import VolumeSlider from '../atoms/VolumeSlider';
+import PlayButton from '../atoms/PlayButton';
+import PauseButton from '../atoms/PauseButton';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -17,15 +19,21 @@ const useStyles = makeStyles(() => ({
 export interface HeaderProps {
   mode: string;
   modeList: string[];
+  isPlay?: boolean;
   changeMode: (mode: string) => void;
   changeVolume: (volume: number) => void;
+  play?: () => void;
+  pause?: () => void;
 }
 
 const Header: FC<HeaderProps> = ({
   mode,
   modeList,
+  isPlay,
   changeMode = () => undefined,
-  changeVolume = () => undefined
+  changeVolume = () => undefined,
+  play = () => undefined,
+  pause = () => undefined
 }) => {
   const [isOpen, setIsOpen] = useState(() => {
     const initialState = false;
@@ -97,8 +105,26 @@ const Header: FC<HeaderProps> = ({
               ))}
             </Breadcrumbs>
           </Grid>
+
           <Grid item xs={2}>
-            <VolumeSlider changeVolume={changeVolume} />
+            <Grid
+              container
+              direction="row"
+              justify="flex-end"
+              alignItems="center"
+              spacing={2}
+            >
+              <Grid item xs={2}>
+                {isPlay ? (
+                  <PauseButton handlePauseButton={pause}></PauseButton>
+                ) : (
+                  <PlayButton handlePlayButton={play}></PlayButton>
+                )}
+              </Grid>
+              <Grid item xs={8}>
+                <VolumeSlider changeVolume={changeVolume} />
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Drawer>

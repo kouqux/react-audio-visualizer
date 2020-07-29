@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import { play, pause, setMusic, changeVolume } from '../store/player/actions';
+import { play, setMusic, changeVolume } from '../store/player/actions';
 
 import Visualizer from '../components/molecules/Visualizer';
 
@@ -27,7 +27,6 @@ interface DispatchProps {
   setMusic: (buffer: AudioBuffer, audioCtx: AudioContext) => void;
   changeVolume: (volume: number) => void;
   play: () => void;
-  pause: () => void;
 }
 
 const mapStateToProps = (state: RootState): StateProps => ({
@@ -40,8 +39,7 @@ const mapStateToProps = (state: RootState): StateProps => ({
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
   setMusic: (buffer, audioCtx) => dispatch(setMusic(buffer, audioCtx)),
   changeVolume: volume => dispatch(changeVolume(volume)),
-  play: () => dispatch(play()),
-  pause: () => dispatch(pause())
+  play: () => dispatch(play())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Visualizer);
