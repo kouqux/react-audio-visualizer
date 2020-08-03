@@ -2,9 +2,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { changeMode } from '../store/visualizer/actions';
-import { changeVolume } from '../store/player/actions';
-import { play } from '../store/player/actions';
-import { pause } from '../store/player/actions';
+import { changeVolume, play, pause } from '../store/player/actions';
 
 import Header from '../components/molecules/Header';
 
@@ -15,6 +13,7 @@ interface RootState {
   };
   player: {
     isPlay: boolean;
+    volume: number;
   };
 }
 
@@ -22,6 +21,7 @@ interface StateProps {
   mode: string;
   modeList: string[];
   isPlay: boolean;
+  volume: number;
 }
 
 interface DispatchProps {
@@ -34,7 +34,8 @@ interface DispatchProps {
 const mapStateToProps = (state: RootState): StateProps => ({
   mode: state.visualizer.mode,
   modeList: state.visualizer.modeList,
-  isPlay: state.player.isPlay
+  isPlay: state.player.isPlay,
+  volume: state.player.volume
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({

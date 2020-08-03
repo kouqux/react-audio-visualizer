@@ -20,6 +20,7 @@ export interface HeaderProps {
   mode: string;
   modeList: string[];
   isPlay?: boolean;
+  volume: number;
   changeMode: (mode: string) => void;
   changeVolume: (volume: number) => void;
   play?: () => void;
@@ -30,6 +31,7 @@ const Header: FC<HeaderProps> = ({
   mode,
   modeList,
   isPlay,
+  volume,
   changeMode = () => undefined,
   changeVolume = () => undefined,
   play = () => undefined,
@@ -116,13 +118,13 @@ const Header: FC<HeaderProps> = ({
             >
               <Grid item xs={2}>
                 {isPlay ? (
-                  <PauseButton handlePauseButton={pause}></PauseButton>
+                  <PauseButton handlePauseButton={pause} />
                 ) : (
-                  <PlayButton handlePlayButton={play}></PlayButton>
+                  <PlayButton handlePlayButton={play} />
                 )}
               </Grid>
               <Grid item xs={8}>
-                <VolumeSlider changeVolume={changeVolume} />
+                <VolumeSlider changeVolume={changeVolume} volume={volume} />
               </Grid>
             </Grid>
           </Grid>

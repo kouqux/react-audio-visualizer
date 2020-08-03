@@ -15,15 +15,17 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface VolumeSliderProps {
+  volume: number;
   changeVolume: (volume: number) => void;
 }
 
-const VolumeSlider: FC<VolumeSliderProps> = ({ changeVolume }) => {
+const VolumeSlider: FC<VolumeSliderProps> = ({ changeVolume, volume }) => {
   const classes = useStyles();
-  const [value, setValue] = React.useState<number>(1);
+  const [value, setValue] = React.useState<number>(volume);
 
   const handleChange = (event: any, newValue: number | number[]) => {
     if (!isNumber(newValue)) return;
+
     setValue(newValue);
     changeVolume(newValue);
   };

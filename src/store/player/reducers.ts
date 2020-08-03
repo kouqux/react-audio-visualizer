@@ -56,8 +56,14 @@ const playerReducer: Reducer<PlayerState, PlayerAction> = (
     }
 
     case PlayerActionType.CHANGE_VOLUME: {
-      if (state.gainNode === undefined) return state;
       if (action.volume === undefined) return state;
+
+      if (state.gainNode === undefined) {
+        return {
+          ...state,
+          volume: action.volume
+        };
+      }
 
       const node = state.gainNode;
       node.gain.value = action.volume;
