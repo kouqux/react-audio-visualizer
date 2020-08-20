@@ -52,7 +52,7 @@
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://djentman.github.io/react-audio-visualizer/",
+  "homepage": "https://suhrr.github.io/react-audio-visualizer/",
   "eslintConfig": {
     "extends": "react-app"
   },
