@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "f06c893d38a368409ee238e500d2f23c",
+    "revision": "5c7c046a9b2016ef4e8b65c630377de8",
     "url": "/react-audio-visualizer/index.html"
   },
   {
-    "revision": "988f0d78d121adccaefa",
+    "revision": "26a89452d27ce2752a88",
     "url": "/react-audio-visualizer/static/css/main.5ecd60fb.chunk.css"
   },
   {
-    "revision": "703c009b1c3825d25a8f",
-    "url": "/react-audio-visualizer/static/js/2.7b3086c2.chunk.js"
+    "revision": "caaaf731f482c272fbb4",
+    "url": "/react-audio-visualizer/static/js/2.d959af7d.chunk.js"
   },
   {
     "revision": "3adc01bea76e7956dc3633ee898f6936",
-    "url": "/react-audio-visualizer/static/js/2.7b3086c2.chunk.js.LICENSE.txt"
+    "url": "/react-audio-visualizer/static/js/2.d959af7d.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "988f0d78d121adccaefa",
-    "url": "/react-audio-visualizer/static/js/main.0f31f05f.chunk.js"
+    "revision": "26a89452d27ce2752a88",
+    "url": "/react-audio-visualizer/static/js/main.d4e418fb.chunk.js"
   },
   {
     "revision": "ebae86b7935426fd952f",
