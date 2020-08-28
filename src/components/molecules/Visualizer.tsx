@@ -61,6 +61,7 @@ const Visualizer: FC<VisualizerProps> = ({
   const inputRef = useRef();
 
   const [canvasUtil, setCanvasUtil] = useState(Object);
+  const [animationFrameId, setAnimationFrameId] = useState(Number);
   const [isViewFileButton, setIsViewFileButton] = useState(() => {
     const initialState = true;
 
@@ -73,6 +74,29 @@ const Visualizer: FC<VisualizerProps> = ({
     return initialState;
   });
 
+  const [isLoaded, setIsLoaded] = useState(() => {
+    const initialState = false;
+
+    return initialState;
+  });
+
+  const render = useCallback(() => {
+    if (!(analyser instanceof AnalyserNode)) return;
+    const bufferLength = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(bufferLength);
+
+    switch (mode) {
+      case 'bar':
+        canvasUtil.drawBarVisualizer(bufferLength);
+        break;
+      case 'circle':
+        canvasUtil.drawCircleVisualizer(bufferLength);
+        break;
+      default:
+    }
+    setAnimationFrameId(requestAnimationFrame(render));
+  }, [analyser, canvasUtil, mode]);
+
   /**
    * ファイル読み込み
    * @param file
@@ -80,10 +104,7 @@ const Visualizer: FC<VisualizerProps> = ({
   const loadFile = (file: File | null): void => {
     if (!file) return;
     if (!file.type.match('audio.*')) return;
-    setIsViewFileButton(false);
-    setIsViewCanvas(true);
-
-    const audioCtx = new AudioContext();
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     const fileReader = new FileReader();
     fileReader.readAsArrayBuffer(file);
@@ -92,7 +113,7 @@ const Visualizer: FC<VisualizerProps> = ({
       if (fileReader.result instanceof ArrayBuffer) {
         audioCtx.decodeAudioData(fileReader.result, buffer => {
           setMusic(buffer, audioCtx);
-          play();
+          setIsLoaded(true);
         });
       }
     };
@@ -107,22 +128,11 @@ const Visualizer: FC<VisualizerProps> = ({
     fileInput.click();
   };
 
-  const render = useCallback((): void => {
-    if (!(analyser instanceof AnalyserNode)) return;
-    const bufferLength = new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(bufferLength);
-    switch (mode) {
-      case 'bar':
-        canvasUtil.drawBarVisualizer(bufferLength);
-        break;
-      case 'circle':
-        canvasUtil.drawCircleVisualizer(bufferLength);
-        break;
-      default:
-    }
-
-    requestAnimationFrame(render);
-  }, [analyser, canvasUtil, mode]);
+  const clickPlayButton = (): void => {
+    setIsViewFileButton(false);
+    setIsViewCanvas(true);
+    play();
+  };
 
   // 初回マウント時
   useEffect(() => {
@@ -135,31 +145,44 @@ const Visualizer: FC<VisualizerProps> = ({
 
   useEffect(() => {
     if (isPlay) {
-      requestAnimationFrame(render);
+      cancelAnimationFrame(animationFrameId);
+      setAnimationFrameId(requestAnimationFrame(render));
     }
-  }, [isPlay, render]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPlay, mode]);
 
   return (
     <div className={classes.container}>
       <Fade in={isViewFileButton} timeout={1000}>
-        <Button
-          variant="outlined"
-          color="primary"
-          className={classes.playButton}
-          onClick={clickFileInput}
-        >
-          MUSIC
-          <input
-            id="fileInput"
-            className={classes.file}
-            type="file"
-            onChange={e =>
-              loadFile(e.target.files !== null ? e.target.files[0] : null)
-            }
-          />
-        </Button>
+        {isLoaded ? (
+          <Button
+            variant="outlined"
+            color="primary"
+            className={classes.playButton}
+            onClick={clickPlayButton}
+          >
+            PLAY
+          </Button>
+        ) : (
+          <Button
+            variant="outlined"
+            color="primary"
+            className={classes.playButton}
+            onClick={clickFileInput}
+          >
+            MUSIC
+            <input
+              id="fileInput"
+              className={classes.file}
+              type="file"
+              onChange={e =>
+                loadFile(e.target.files !== null ? e.target.files[0] : null)
+              }
+            />
+          </Button>
+        )}
       </Fade>
-
       <Fade in={isViewCanvas} timeout={1000}>
         <div id="canvasContainer" className={classes.canvasContainer}>
           <canvas id="canvas" className={classes.canvas} />
