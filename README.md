@@ -1,5 +1,5 @@
 # react-audio-visualizer
-This repository is used React.  
+This app is used React.  
 You can see the audio visualizer.
 ![smaple](https://github.com/djentman/react-audio-visualizer/blob/master/public/sample.png)
 
